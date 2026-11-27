@@ -1,43 +1,58 @@
 # indramodoro (Flutter)
 
-Temporizador Pomodoro minimalista. Sin dependencias extra: solo Flutter.
+A minimalist Pomodoro timer: 25 min focus, 5 min short break, 15 min long break after 4 sessions.
 
-## Requisitos
+![Indramodoro Flutter](main-flutter.png)
 
-- [Flutter SDK](https://docs.flutter.dev/get-started/install) 3.x (con `flutter doctor` sin errores para tu plataforma)
+## How to run (first time, web)
 
-## Instalar y ejecutar
+### 1. Install Flutter
 
-Estando dentro de esta carpeta:
+Skip this step if `flutter --version` already works. On Ubuntu / WSL:
 
 ```bash
-# 1. Generar las carpetas de plataforma (android/, ios/) una sola vez.
-#    No sobrescribe lib/ ni pubspec.yaml.
-flutter create . --project-name indramodoro_flutter --platforms=android,ios
-
-# 2. Instalar dependencias
-flutter pub get
-
-# 3. Ejecutar (con un emulador abierto o un celular conectado)
-flutter run
+sudo apt update
+sudo apt install -y git curl unzip xz-utils zip libglu1-mesa
+git clone https://github.com/flutter/flutter.git -b stable ~/flutter
+echo 'export PATH="$HOME/flutter/bin:$PATH"' >> ~/.bashrc
+source ~/.bashrc
+flutter config --enable-web
 ```
 
-Pruebas de la lógica del temporizador (opcional):
+`flutter doctor` may report a missing Android toolchain, Chrome, or Linux toolchain. Ignore these; they are not needed for web.
+
+### 2. Set up the project
+
+From the project folder (the one with `pubspec.yaml`):
+
+```bash
+flutter create . --project-name indramodoro_flutter --platforms=web
+flutter pub get
+```
+
+`flutter create .` only adds the `web/` folder. It does not overwrite `lib/` or `pubspec.yaml`.
+
+### 3. Run
+
+```bash
+flutter run -d web-server --web-port 8080
+```
+
+The first build takes a couple of minutes. When it finishes, open `http://localhost:8080` in your browser.
+
+Press `r` in the terminal to hot reload, `q` to quit.
+
+### Next times
+
+Only step 3 is needed.
+
+## Tests
 
 ```bash
 flutter test
 ```
 
-## Estructura
+## Structure
 
-- `lib/pomodoro_timer.dart`: lógica (etapas, pausa, reinicio, cambio automático). Sin UI.
-- `lib/main.dart`: la pantalla.
-- `test/widget_test.dart`: pruebas de la lógica con un reloj simulado.
-
-## Cómo evita desincronizarse
-
-Mientras corre, el temporizador guarda la hora exacta en la que termina la etapa y
-el tiempo restante es siempre `hora de fin - hora actual`. El `Timer.periodic` solo
-sirve para refrescar la pantalla y detectar el fin; si un tick llega tarde, el
-resultado sigue siendo correcto. Al pausar se guarda lo que faltaba, y al reanudar
-se calcula una nueva hora de fin.
+- `lib/pomodoro_timer.dart`: timer logic
+- `lib/main.dart`: UI
