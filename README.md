@@ -40,17 +40,7 @@ flutter run -d web-server --web-port 8080
 
 The first build takes a couple of minutes. When it finishes, open `http://localhost:8080` in your browser.
 
-Press `r` in the terminal to hot reload, `q` to quit.
 
-### Next times
-
-Only step 3 is needed.
-
-## Tests
-
-```bash
-flutter test
-```
 
 ## Structure
 
